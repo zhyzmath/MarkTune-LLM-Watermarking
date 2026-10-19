@@ -1,8 +1,6 @@
-# MarkTune
+# MarkTune: Improving the Quality-Detectability Trade-off in Model-Embedded LLM Watermarking
 
 [![arXiv](https://img.shields.io/badge/arXiv-2512.04044-b31b1b.svg?logo=arxiv&logoColor=white)](https://arxiv.org/pdf/2512.04044)
-
-Code for **MarkTune: Improving the Quality-Detectability Trade-off in Model-Embedded LLM Watermarking**.
 
 MarkTune initializes an actor with an RMS-scaled Gaussian watermark and optimizes it with GRPO and cross-entropy on human text. The watermark reward and detector share a fixed clean reference model. Generation uses standard Hugging Face decoding.
 
