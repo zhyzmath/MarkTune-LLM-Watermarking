@@ -77,7 +77,7 @@ marktune prepare-eval --config configs/qwen3.yaml --task eli5 \
   --source 'ELI5, test, YOUR_DATASET_REVISION'
 ```
 
-Complete OpenWebText documents are deduplicated before seeded assignment to the three disjoint splits. Training prompts contain 64–256 tokens. Manifests retain input hashes, document identities, counts, seeds, and tokenizer revisions. The example counts are configurable and are not a specification of the original paper's training subset.
+Complete OpenWebText documents are deduplicated before seeded assignment to the three disjoint splits. Training prompts contain 64–256 tokens. Manifests retain input hashes, document identities, counts, seeds, and tokenizer revisions.
 
 C4 inputs must exceed 400 tokens: the first 200 form the prompt and the next 200 the human reference. ELI5 answers must exceed 200 tokens and are truncated to 200. Each model needs its own tokenized preparation. Keep evaluation corpora separate from all training inputs.
 
@@ -116,7 +116,7 @@ Use the same prepared prompts and clean generations for each comparison. Detecti
 
 The generation and detection methods are `marktune`, `gaussmark`, `kgw-1`, `kgw-2`, `gumbel`, `synthid`, and `kgw-d`. For GaussMark, initialize with `--method gaussmark` and generate from its `actor/` directory. KGW-1/2 use γ=0.5, δ=1/2 and a four-token prefix. Gumbel-max and SynthID also use four-token prefixes; SynthID uses 30 tournaments. Each response starts with a fresh sampler state.
 
-KGW-D requires a distilled checkpoint with matching tokenizer, teacher PRF, and teacher hash key. The Llama recipe supplies the public one-token-prefix KGW-D checkpoint (γ=0.25, δ=1). Its detector follows the [released teacher implementation](https://github.com/chenchenygu/watermark-learnability/tree/f84f70f9fc30eba5e39bf1889376d61de5f2ee59): CPU `simple_1` green lists, key 15485863, and special-token exclusions. Teacher settings are under `baselines.kgw_distilled`. Set `baselines.kgw_distilled_model` or pass `--model` for other compatible checkpoints; a Qwen KGW-D checkpoint is not included.
+KGW-D requires a distilled checkpoint with matching tokenizer, teacher PRF, and teacher hash key. The Llama recipe supplies the public one-token-prefix KGW-D checkpoint (γ=0.25, δ=1). Its detector follows the [released teacher implementation](https://github.com/chenchenygu/watermark-learnability/tree/f84f70f9fc30eba5e39bf1889376d61de5f2ee59): CPU `simple_1` green lists, key 15485863, and special-token exclusions. Teacher settings are under `baselines.kgw_distilled`. For other compatible distilled checkpoints, set `baselines.kgw_distilled_model` or pass `--model`.
 
 The trade-off sweeps use these values with the same initialization, training, generation, and metric commands:
 
@@ -164,16 +164,12 @@ marktune benchmark --config configs/qwen3.yaml --method marktune \
   --input data/qwen3/c4.jsonl --output outputs/qwen3-latency.json
 ```
 
-To include MBPP, use `--tasks mmlu,gsm8k,mbpp --allow-code-execution` in an isolated execution environment. Run all compared checkpoints with the same LM Evaluation Harness version and task settings. The wrapper uses 5-shot MMLU and the installed task definitions for GSM8K and MBPP; the paper does not specify these few-shot settings.
+To include MBPP, use `--tasks mmlu,gsm8k,mbpp --allow-code-execution` in an isolated execution environment. Run all compared checkpoints with the same LM Evaluation Harness version and task settings. The wrapper uses 5-shot MMLU and the installed task definitions for GSM8K and MBPP.
 
 Latency uses batch size one, the first 100 C4 prompts with 200-token prefixes, 200-token responses, and two additional warmup prompts. CUDA synchronization brackets each timed operation. Generation/detection times and individual measurements are written as JSON.
 
-## Reproducibility and availability
-
-The recipes specify the camera-ready main-body settings. Training subset sizes, immutable dataset snapshots, original checkpoint hashes, and global seeds are not fully specified in the paper; configurable seeds are provided, and manifests record each new run's inputs. Model weights, datasets, and paper result files are not bundled. New runs must be evaluated before claiming reproduction of the reported numbers.
+## License
 
 Third-party attribution and licensing are listed in [THIRD_PARTY.md](THIRD_PARTY.md).
-
-## License
 
 MarkTune is released under the [MIT License](LICENSE). Bundled third-party components and derived baseline modules retain their Apache-2.0 licenses.

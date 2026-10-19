@@ -1221,8 +1221,7 @@ def compute_policy_loss_geo_mean(
     # Geometric-Mean Policy Optimization
     response_mask_sum = response_mask.sum(dim=-1)
     ratio = torch.exp((negative_approx_kl_min * response_mask).sum(dim=-1) / (response_mask_sum + 1e-8))
-    # we only support sequence level advantage for now,
-    # otherwise, below would be not consistent with the paper
+    # GMPO uses one sequence-level advantage per response.
     advantage = (advantages * response_mask).sum(dim=-1) / (response_mask_sum + 1e-8)
     pg_losses = -advantage * ratio
     pg_loss = torch.mean(pg_losses)
