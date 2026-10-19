@@ -1,0 +1,72 @@
+model:
+  name: Qwen/Qwen3-4B-Base
+  revision: null
+  oracle: Qwen/Qwen3-8B
+  dtype: bfloat16
+watermark:
+  parameters: [model.layers.28.mlp.up_proj.weight]
+  sigma: 0.6
+  gaussmark_sigma: 1.0
+  seed: 133377
+data:
+  directory: data/qwen3
+  seed: 23333
+  min_prompt_tokens: 64
+  max_prompt_tokens: 256
+training:
+  regularization: ce
+  seed: 23333
+  total_steps: 200
+  learning_rate: 5.0e-6
+  warmup_steps: 20
+  cosine_decay_fraction: 0.4
+  min_learning_rate_ratio: 0.0
+  betas: [0.9, 0.97]
+  weight_decay: 0.0
+  gradient_clip: 1.0
+  clip_ratio: 0.2
+  group_size: 8
+  prompt_batch_size: 64
+  mini_batch_size: 64
+  inner_steps: 3
+  response_tokens: 256
+  temperature: 0.7
+  ce_coefficient: 0.01
+  ce_batch_size: 128
+  ce_sequence_length: 512
+  save_steps: 50
+evaluation:
+  num_samples: 500
+  prompt_tokens: 200
+  response_tokens: 200
+  temperature: 0.7
+  seed: 1377
+  fpr: 0.01
+  bootstrap_samples: 500
+  confidence: 0.9
+baselines:
+  kgw: {gamma: 0.5, delta: 1.0, prefix_length: 4, hash_key: 42}
+  gumbel: {prefix_length: 4, seed: 15485863}
+  synthid: {prefix_length: 4, tournaments: 30, sampling_table_seed: 0}
+  kgw_distilled: {gamma: 0.25, hash_key: 15485863}
+  kgw_distilled_model: null
+attacks:
+  delete_ratios: [0.2, 0.5]
+  substitute_ratios: [0.2, 0.5]
+  dipper_diversities: [20, 60]
+  lora:
+    steps: 1500
+    learning_rate: 1.0e-5
+    warmup_steps: 300
+    batch_size: 64
+    sequence_length: 512
+    rank: 8
+    alpha: 16
+    target_modules: [gate_proj, up_proj, down_proj, lm_head]
+    save_steps: 100
+runtime:
+  device: cuda
+  gpus: 4
+  micro_batch_size: 8
+  rollout_tensor_parallel_size: 4
+  rollout_memory_fraction: 0.6

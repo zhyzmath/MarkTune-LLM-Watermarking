@@ -1,0 +1,72 @@
+model:
+  name: meta-llama/Llama-2-7b-hf
+  revision: null
+  oracle: meta-llama/Llama-2-13b-hf
+  dtype: bfloat16
+watermark:
+  parameters: [model.layers.30.mlp.up_proj.weight]
+  sigma: 0.8
+  gaussmark_sigma: 1.2
+  seed: 133377
+data:
+  directory: data/llama2
+  seed: 23333
+  min_prompt_tokens: 64
+  max_prompt_tokens: 256
+training:
+  regularization: ce
+  seed: 23333
+  total_steps: 300
+  learning_rate: 4.0e-6
+  warmup_steps: 30
+  cosine_decay_fraction: 0.4
+  min_learning_rate_ratio: 0.0
+  betas: [0.9, 0.97]
+  weight_decay: 0.0
+  gradient_clip: 1.0
+  clip_ratio: 0.2
+  group_size: 8
+  prompt_batch_size: 64
+  mini_batch_size: 64
+  inner_steps: 3
+  response_tokens: 256
+  temperature: 1.0
+  ce_coefficient: 0.005
+  ce_batch_size: 128
+  ce_sequence_length: 512
+  save_steps: 50
+evaluation:
+  num_samples: 500
+  prompt_tokens: 200
+  response_tokens: 200
+  temperature: 1.0
+  seed: 1377
+  fpr: 0.01
+  bootstrap_samples: 500
+  confidence: 0.9
+baselines:
+  kgw: {gamma: 0.5, delta: 1.0, prefix_length: 4, hash_key: 42}
+  gumbel: {prefix_length: 4, seed: 15485863}
+  synthid: {prefix_length: 4, tournaments: 30, sampling_table_seed: 0}
+  kgw_distilled: {gamma: 0.25, hash_key: 15485863}
+  kgw_distilled_model: cygu/llama-2-7b-logit-watermark-distill-kgw-k1-gamma0.25-delta1
+attacks:
+  delete_ratios: [0.2, 0.5]
+  substitute_ratios: [0.2, 0.5]
+  dipper_diversities: [20, 60]
+  lora:
+    steps: 1500
+    learning_rate: 1.0e-5
+    warmup_steps: 300
+    batch_size: 64
+    sequence_length: 512
+    rank: 8
+    alpha: 16
+    target_modules: [gate_proj, up_proj, down_proj, lm_head]
+    save_steps: 100
+runtime:
+  device: cuda
+  gpus: 4
+  micro_batch_size: 8
+  rollout_tensor_parallel_size: 4
+  rollout_memory_fraction: 0.6

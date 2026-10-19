@@ -1,0 +1,20 @@
+_target_: verl.workers.config.HFModelConfig
+path: ~/models/deepseek-llm-7b-chat
+hf_config_path: null
+tokenizer_path: null
+use_shm: false
+trust_remote_code: false
+custom_chat_template: null
+external_lib: null
+override_config: {}
+enable_gradient_checkpointing: true
+enable_activation_offload: false
+use_remove_padding: false
+lora_rank: 0
+lora_alpha: 16
+target_modules: all-linear
+exclude_modules: null
+use_liger: false
+use_fused_kernels: false
+fused_kernel_options:
+  impl_backend: torch

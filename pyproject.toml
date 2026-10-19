@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "marktune"
+version = "0.1.0"
+description = "On-policy fine-tuning for model-embedded language model watermarks"
+license = "MIT AND Apache-2.0"
+license-files = ["LICENSE", "third_party/markllm/LICENSE", "third_party/markllm/NOTICE"]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["PyYAML>=6,<7", "torch>=2.6", "transformers>=4.51.3,<4.52", "numpy>=1.24,<2", "scipy>=1.11,<2"]
+
+[project.optional-dependencies]
+data = ["datasets>=2.19,<4", "pyarrow>=19", "sentencepiece>=0.2"]
+evaluation = ["datasets>=2.19,<4", "pyarrow>=19", "accelerate>=1.4,<2", "mauve-text==0.4.0", "nltk>=3.9", "sentencepiece>=0.2", "sacremoses>=0.1"]
+attacks = ["peft>=0.15,<0.16", "accelerate>=1.4,<2", "datasets>=2.19,<4", "pyarrow>=19", "nltk>=3.9", "sentencepiece>=0.2", "sacremoses>=0.1"]
+downstream = ["lm-eval==0.4.8"]
+test = ["pytest>=8", "hydra-core==1.3.2"]
+
+[project.scripts]
+marktune = "marktune.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["marktune*"]
+namespaces = false
+
+[tool.setuptools.data-files]
+"share/marktune/configs" = ["configs/*.yaml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]

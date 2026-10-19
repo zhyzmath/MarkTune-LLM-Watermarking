@@ -1,0 +1,10 @@
+# Linux with CUDA; install matching flash-attn after PyTorch.
+torch==2.6.0
+transformers==4.51.3
+vllm==0.8.5
+ray[default]>=2.43,<2.44
+tensordict==0.8.3
+torchdata==0.11.0
+peft>=0.15,<0.16
+accelerate>=1.4,<2
+numpy>=1.24,<2

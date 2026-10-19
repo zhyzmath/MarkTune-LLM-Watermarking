@@ -1,0 +1,7 @@
+include README.md THIRD_PARTY.md LICENSE .gitignore
+recursive-include configs *.yaml
+recursive-include requirements *.txt
+recursive-include tests *.py
+recursive-include third_party *.py *.yaml *.toml LICENSE NOTICE
+recursive-include third_party/verl/verl/version version
+global-exclude __pycache__ *.py[cod] .DS_Store

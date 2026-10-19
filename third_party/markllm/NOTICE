@@ -1,0 +1,16 @@
+MarkLLM
+Copyright 2024 THU-BPM MarkLLM.
+https://github.com/THU-BPM/MarkLLM
+
+The KGW, Gumbel-max (EXP), and SynthID implementations in
+src/marktune/baselines/ are adapted from these Apache-2.0 sources:
+watermark/kgw/kgw.py
+watermark/exp/exp.py
+watermark/synthid/synthid.py
+watermark/synthid/detector.py
+
+The adapters provide token-based scoring and Hugging Face generation processors.
+Gumbel-max uses the equivalent log-domain exponential race. SynthID uses the
+configured number of prefix tokens, actual prompt context, and independent
+context history for each generation. Framework, visualization, and learned
+Bayesian-detector components are not included.
